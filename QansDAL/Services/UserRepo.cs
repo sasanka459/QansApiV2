@@ -1,4 +1,5 @@
-﻿using QansDAL.Abstraction;
+﻿using Microsoft.EntityFrameworkCore;
+using QansDAL.Abstraction;
 using QansDAL.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ namespace QansDAL.Services
         {
             _context = qansDbContext;
         }
-        public IEnumerable<User> GetUser()
+        public async Task<IEnumerable<User>> GetUser()
         {
-            return _context.Users.ToList();
+            return await _context.Users.ToListAsync();
         }
     }
 }

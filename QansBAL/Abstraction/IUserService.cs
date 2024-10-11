@@ -1,13 +1,13 @@
-﻿using QansDAL.Entities;
+﻿using QansBAL.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace QansDAL.Abstraction
+namespace QansBAL.Abstraction
 {
-    public interface IUserRepo
+    public interface IUserService
     {
         public Task<IEnumerable<User>> GetUser();
     }
