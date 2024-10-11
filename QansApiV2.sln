@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QansApiV2", "QansApiV2\Qans
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QansBAL", "QansBAL\QansBAL.csproj", "{321D8E35-F543-4459-8727-20FD074C6E82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QansDAL", "QansDAL\QansDAL.csproj", "{10F51795-164E-43B0-B896-54C37528D1A5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{321D8E35-F543-4459-8727-20FD074C6E82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{321D8E35-F543-4459-8727-20FD074C6E82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{321D8E35-F543-4459-8727-20FD074C6E82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10F51795-164E-43B0-B896-54C37528D1A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10F51795-164E-43B0-B896-54C37528D1A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10F51795-164E-43B0-B896-54C37528D1A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10F51795-164E-43B0-B896-54C37528D1A5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
