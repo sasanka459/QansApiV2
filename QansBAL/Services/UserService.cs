@@ -23,7 +23,6 @@ namespace QansBAL.Services
             {
                 UserId = x.UserId,
                 Username = x.Username,
-                PasswordHash = x.PasswordHash,
                 MobileNo = x.MobileNo,
                 CreatedAt = x.CreatedAt,
                 Email = x.Email
