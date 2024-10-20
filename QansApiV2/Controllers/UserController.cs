@@ -23,6 +23,7 @@ namespace QansApiV2.Controllers
         public async Task<IActionResult> GetUser()
         {
             var Users =await _userService.GetUser();
+            throw new Exception("Something went wrong try again");
             return Users == null|| Users?.Count()==0 ? NotFound() : Ok(Users);
         }
 
