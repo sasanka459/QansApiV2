@@ -1,6 +1,8 @@
 using Azure.Identity;
 using Azure.Security.KeyVault.Secrets;
 using Microsoft.EntityFrameworkCore;
+using QansApiV2.CustomMiddleware;
+using QansApiV2.Infra;
 using QansBAL.Abstraction;
 using QansBAL.Services;
 using QansDAL.Abstraction;
@@ -36,7 +38,11 @@ var sqlConnection=String.Format(builder.Configuration.GetConnectionString("conne
 
 builder.Services.AddDbContext<QansDbContext>(Option =>
  Option.UseSqlServer(sqlConnection));
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 var app = builder.Build();
+//app.UseMiddleware<ExceptionHandlingMiddleware>();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -45,8 +51,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
 
+app.UseMiddleware<Middleware1>();
+
+app.UseMiddleware<Middleware2>();
+
+app.UseHttpsRedirection();
+app.UseExceptionHandler();
 app.UseAuthorization();
 
 app.MapControllers();
