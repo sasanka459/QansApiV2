@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using QansBAL.Abstraction;
 using QansBAL.Models;
@@ -17,13 +18,14 @@ namespace QansApiV2.Controllers
         }
 
 
+
         [HttpGet(Name = "GetUser")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetUser()
         {
             var Users =await _userService.GetUser();
-            throw new Exception("Something went wrong try again");
             return Users == null|| Users?.Count()==0 ? NotFound() : Ok(Users);
         }
 
