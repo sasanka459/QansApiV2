@@ -31,6 +31,8 @@ builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IUserRepo,UserRepo>();
 builder.Services.AddScoped<IQuestionService,QuestionService>();
 builder.Services.AddScoped<IQuestionRepo,QuestionRepoService>();
+builder.Services.AddScoped<ITopicService,TopicService>();
+builder.Services.AddScoped<ITopicRepo,TopicReposervice>();
 
 // Add CORS policy
 builder.Services.AddCors(options =>
