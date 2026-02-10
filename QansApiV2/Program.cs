@@ -12,6 +12,9 @@ using QansDAL.Services;
 using Microsoft.Identity.Web;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Builder;
+using Azure.Data.Tables;
+using QansNoSqlDAL.Abstraction;
+using QansNoSqlDAL.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +29,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService,UserService>();
 builder.Services.AddScoped<IUserRepo,UserRepo>();
+builder.Services.AddScoped<IQuestionService,QuestionService>();
+builder.Services.AddScoped<IQuestionRepo,QuestionRepoService>();
+builder.Services.AddScoped<ITopicService,TopicService>();
+builder.Services.AddScoped<ITopicRepo,TopicReposervice>();
+
 // Add CORS policy
 builder.Services.AddCors(options =>
 {
@@ -46,9 +54,12 @@ var client = new SecretClient(vaultUri: keyVaultUri, credential: new DefaultAzur
 //Read User Name and password from Keyvault
 var sqlUserName = client.GetSecret("qansSqlUserName").Value;
 var sqlPassword = client.GetSecret("qansSqlPassword").Value;
+var storageConnectionString= client.GetSecret("qnsSaConnection").Value;
 #endregion
 
 
+// Register TableServiceClient
+builder.Services.AddSingleton(new TableServiceClient(storageConnectionString.Value));
 
 var sqlConnection=String.Format(builder.Configuration.GetConnectionString("connectionsString"), sqlUserName.Value, sqlPassword.Value );
 
