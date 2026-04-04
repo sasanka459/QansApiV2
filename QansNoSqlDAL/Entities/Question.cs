@@ -5,7 +5,7 @@ namespace QansNoSqlDAL.Entities
 {
     public class Question : ITableEntity
     {
-        public string PartitionKey {  get; set; }
+        public string PartitionKey { get; set; }
         public string RowKey { get; set; }
         public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
@@ -18,6 +18,6 @@ namespace QansNoSqlDAL.Entities
 
         public string? CreatedBy { get; set; }
 
-
+        public object? MetadataJson { get; set; }
     }
 }

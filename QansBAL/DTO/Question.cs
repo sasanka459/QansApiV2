@@ -10,9 +10,9 @@ namespace QansBAL.DTO
     public class Question
     {
         public int Id { get; set; }
-        public required string Topic { get; set; }
+        public string? Topic { get; set; }
 
-        public required string Subject {  get; set; }
+        public string? Subject { get; set; }
 
         public string? QuestionHeader { get; set; }
 
@@ -21,5 +21,7 @@ namespace QansBAL.DTO
         public string? QuestionType { get; set; }
 
         public string? CreatedBy { get; set; }
+
+        public object? Metadata { get; set; }
     }
 }

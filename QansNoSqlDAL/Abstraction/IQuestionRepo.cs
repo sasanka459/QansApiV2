@@ -9,6 +9,10 @@ namespace QansNoSqlDAL.Abstraction
 {
     public interface IQuestionRepo
     {
-        public Task SaveQuestion(Question question);
+        Task SaveQuestion(Question question);
+
+        Task<Question> GetQuestion(string partitionKey, string rowKey);
+
+        Task<List<Question>> GetAll(string? partitionKey = null);
     }
 }

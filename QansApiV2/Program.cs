@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Builder;
 using Azure.Data.Tables;
 using QansNoSqlDAL.Abstraction;
 using QansNoSqlDAL.Services;
+using Microsoft.ApplicationInsights.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,12 +28,15 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddMi
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IUserService,UserService>();
-builder.Services.AddScoped<IUserRepo,UserRepo>();
-builder.Services.AddScoped<IQuestionService,QuestionService>();
-builder.Services.AddScoped<IQuestionRepo,QuestionRepoService>();
-builder.Services.AddScoped<ITopicService,TopicService>();
-builder.Services.AddScoped<ITopicRepo,TopicReposervice>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services.AddScoped<IQuestionService, QuestionService>();
+builder.Services.AddScoped<IQuestionRepo, QuestionRepoService>();
+builder.Services.AddScoped<ITopicService, TopicService>();
+builder.Services.AddScoped<ITopicRepo, TopicReposervice>();
+builder.Services.AddScoped<IExamRepo, ExamRepoService>();
+builder.Services.AddScoped<IExamService, ExamService>();
+builder.Services.AddApplicationInsightsTelemetry(builder.Configuration);
 
 // Add CORS policy
 builder.Services.AddCors(options =>
@@ -44,6 +48,7 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod();
     });
 });
+
 #region Keyvault
 
 var keyVaultname = builder.Configuration["KeyVault:Name"];
@@ -51,17 +56,17 @@ var keyVaultname = builder.Configuration["KeyVault:Name"];
 var keyVaultUri = new Uri($"https://{keyVaultname}.vault.azure.net/");
 var client = new SecretClient(vaultUri: keyVaultUri, credential: new DefaultAzureCredential(new DefaultAzureCredentialOptions { ExcludeEnvironmentCredential = true }));
 
-//Read User Name and password from Keyvault
-var sqlUserName = client.GetSecret("qansSqlUserName").Value;
-var sqlPassword = client.GetSecret("qansSqlPassword").Value;
-var storageConnectionString= client.GetSecret("qnsSaConnection").Value;
-#endregion
+//Read UserName and password from Keyvault
+var sqlUserName = client.GetSecret("qansSqlUserName").Value.Value;
+var sqlPassword = client.GetSecret("qansSqlPassword").Value.Value;
+var storageConnectionString = client.GetSecret("qnsSaConnection").Value.Value;
 
+#endregion Keyvault
 
 // Register TableServiceClient
-builder.Services.AddSingleton(new TableServiceClient(storageConnectionString.Value));
+builder.Services.AddSingleton(new TableServiceClient(storageConnectionString));
 
-var sqlConnection=String.Format(builder.Configuration.GetConnectionString("connectionsString"), sqlUserName.Value, sqlPassword.Value );
+var sqlConnection = String.Format(builder.Configuration.GetConnectionString("connectionsString"), sqlUserName, sqlPassword);
 
 builder.Services.AddDbContext<QansDbContext>(Option =>
  Option.UseSqlServer(sqlConnection));
@@ -107,10 +112,6 @@ builder.Services.AddSwaggerGen(c =>
     //    }
     //});
 
-
-
-
-
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -138,16 +139,11 @@ builder.Services.AddSwaggerGen(c =>
     //    },
     //    new List < string > ()
     //}
-
     });
-
-
 });
-
 
 var app = builder.Build();
 //app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -164,7 +160,7 @@ if (app.Environment.IsDevelopment())
 
     //app.UseSwaggerUI(c => {
     //    c.SwaggerEndpoint("/swagger/v1/swagger.json", "AzureAD_OAuth_API v1");
-    //    //c.RoutePrefix = string.Empty;    
+    //    //c.RoutePrefix = string.Empty;
     //    c.OAuthClientId(builder.Configuration["AzureAd:ClientId"]);
     //    c.OAuthClientSecret(builder.Configuration["AzureAd:ClientSecret"]);
     //    c.OAuthUseBasicAuthenticationWithAccessCodeGrant();
