@@ -14,13 +14,13 @@ namespace QansApiV2.Controllers
 
         public QuestionController(IQuestionService questionService)
         {
-            _questionService=questionService;
+            _questionService = questionService;
         }
 
         [HttpPost(Name = "SaveQuestion")]
         public async Task<IActionResult> SaveQuestion(Question qus)
         {
-            if (qus == null)  return BadRequest("Null question is not accepted.");
+            if (qus == null) return BadRequest("Null question is not accepted.");
 
             try
             {
@@ -32,11 +32,35 @@ namespace QansApiV2.Controllers
                 return StatusCode(500, new
                 {
                     Message = "An unexpected error occurred.",
-                    Details = ex.Message 
+                    Details = ex.Message
                 });
             }
+        }
 
-           
+        [HttpGet(Name = "GetQuestions")]
+        public async Task<IActionResult> GetQuestions([FromQuery] string? topic = null, [FromQuery] string? subject = null)
+        {
+            try
+            {
+                // Assuming your Service returns a List<Question>
+                // If topic or subject are provided, your service should filter accordingly
+                var questions = await _questionService.GetQuestions(topic, subject);
+
+                if (questions == null || !questions.Any())
+                {
+                    return NotFound("No questions found matching the criteria.");
+                }
+
+                return Ok(questions);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new
+                {
+                    Message = "Error retrieving questions.",
+                    Details = ex.Message
+                });
+            }
         }
     }
 }

@@ -9,12 +9,9 @@ namespace QansBAL.Abstraction
 {
     public interface IQuestionService
     {
-        /// <summary>
-        /// Transform the DTO model into repo entity.
-        /// Calls the repo layer to save it in the table storage.
-        /// </summary>
-        /// <param name="question">DTO Question</param>
-        /// <returns></returns>
-        public Task SaveQuestion(Question question);
+        Task SaveQuestion(Question question);
+
+        // Fix: Return a list and accept filter strings
+        Task<IEnumerable<Question>> GetQuestions(string? topic, string? subject);
     }
 }
