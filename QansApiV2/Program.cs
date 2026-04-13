@@ -67,7 +67,7 @@ var storageConnectionString = client.GetSecret("qnsSaConnection").Value.Value;
 builder.Services.AddSingleton(new TableServiceClient(storageConnectionString));
 
 // Get the connection-string template and validate it before formatting
-var connTemplate = builder.Configuration.GetConnectionString("connectionsString")
+var connTemplate = builder.Configuration.GetConnectionString("connectionString")
                    ?? throw new InvalidOperationException("Connection string template 'connectionsString' not found in configuration.");
 
 var sqlConnection = string.Format(connTemplate, sqlUserName, sqlPassword);
