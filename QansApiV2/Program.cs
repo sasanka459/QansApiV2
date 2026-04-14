@@ -188,8 +188,4 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/qans", () => Results.Redirect("/swagger/index.html"))
-   .WithName("Root")
-   .WithOpenApi();
-
 app.Run();
