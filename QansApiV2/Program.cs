@@ -185,4 +185,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+app.MapGet("/", () => Results.Redirect("/swagger/index.html"))
+   .WithName("Root")
+   .WithOpenApi();
+
 app.Run();
