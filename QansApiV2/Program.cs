@@ -16,6 +16,9 @@ using Azure.Data.Tables;
 using QansNoSqlDAL.Abstraction;
 using QansNoSqlDAL.Services;
 using Microsoft.ApplicationInsights.AspNetCore;
+using Microsoft.AspNetCore.OpenApi;
+
+;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -185,7 +188,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGet("/", () => Results.Redirect("/swagger/index.html"))
+app.MapGet("/qans", () => Results.Redirect("/swagger/index.html"))
    .WithName("Root")
    .WithOpenApi();
 
