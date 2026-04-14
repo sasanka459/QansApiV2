@@ -16,6 +16,9 @@ using Azure.Data.Tables;
 using QansNoSqlDAL.Abstraction;
 using QansNoSqlDAL.Services;
 using Microsoft.ApplicationInsights.AspNetCore;
+using Microsoft.AspNetCore.OpenApi;
+
+;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,7 +69,11 @@ var storageConnectionString = client.GetSecret("qnsSaConnection").Value.Value;
 // Register TableServiceClient
 builder.Services.AddSingleton(new TableServiceClient(storageConnectionString));
 
-var sqlConnection = String.Format(builder.Configuration.GetConnectionString("connectionsString"), sqlUserName, sqlPassword);
+// Get the connection-string template and validate it before formatting
+var connTemplate = builder.Configuration.GetConnectionString("connectionString")
+                   ?? throw new InvalidOperationException("Connection string template 'connectionsString' not found in configuration.");
+
+var sqlConnection = string.Format(connTemplate, sqlUserName, sqlPassword);
 
 builder.Services.AddDbContext<QansDbContext>(Option =>
  Option.UseSqlServer(sqlConnection));
@@ -146,7 +153,7 @@ var app = builder.Build();
 //app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.IsProduction())
 {
     app.UseSwagger();
     app.UseSwaggerUI(c =>
